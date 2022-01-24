@@ -1,20 +1,20 @@
 const courses = [
   {
-    _id: 0,
+    _id: "0",
     title: "First Course",
     teacher: "Xaluman",
     description: "Basic Magic Course",
     topic: "Magic",
   },
   {
-    _id: 1,
+    _id: "1",
     title: "Second Course",
     teacher: "Maxulumian",
     description: "Magic Course",
     topic: "Magic",
   },
   {
-    _id: 2,
+    _id: "2",
     title: "Three Course",
     teacher: "Mianxuluma",
     description: "Advance Magic Course",
@@ -25,6 +25,8 @@ const courses = [
 export const resolvers = {
   Query: {
     courses: () => courses,
-    course: (root, args) => 
+    course: (root: any, args: any) => {
+      return courses.find(course => course._id === args.id)
+    } 
   },
 };
