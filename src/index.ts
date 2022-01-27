@@ -1,5 +1,5 @@
-import { graphql, buildSchema } from "graphql";
 import { makeExecutableSchema } from "@graphql-tools/schema";
+import {DIRECTIVES} from "@graphql-codegen/typescript-mongodb"
 import express from "express"
 import { graphqlHTTP } from "express-graphql";
 import { readFileSync } from "fs";
@@ -11,7 +11,10 @@ const port = process.env.PORT || 3000
 const typeDefs = readFileSync(path.join(__dirname,`lib`,`schema.graphql`), 'utf8')
 
 const schema = makeExecutableSchema({
-    typeDefs,
+    typeDefs:[
+        DIRECTIVES,
+        typeDefs
+    ],
     resolvers
 })
 
@@ -22,6 +25,5 @@ app.use("/api", graphqlHTTP({
     graphiql:true
 }))
 app.listen(port, ()=>{
-    console.log(`Server running on port: ${port}`)
+    console.log(`Server running on: http://localhost:${port}/api`)
 })
-//graphql(schema, '{hello}', root).then((response) => console.log(response))

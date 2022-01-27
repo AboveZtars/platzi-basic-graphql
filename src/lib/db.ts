@@ -1,9 +1,9 @@
 "use strict";
 import { MongoClient } from "mongodb";
+require("dotenv").config()
 
-const { DB_USERNAME, DB_PASSWORD, DB_PORT, DB_HOST, DB_NAME } = process.env;
-
-const urlMongodb = `mongodb://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}`;
+const { DB_USERNAME, DB_PASSWORD, DB_HOST, DB_NAME } = process.env;
+const urlMongodb = `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}?retryWrites=true&w=majority`;
 
 export async function connectDB() {
   let connection;
@@ -16,6 +16,7 @@ export async function connectDB() {
       connection = await client.db();
     } catch (error) {
       console.error(error);
+      process.exit(1)
     }
   }
   return connection;

@@ -1,9 +1,10 @@
-type Course {
-  _id: ID!
-  title: String!
-  teacher: String
-  description: String!
-  topic: String
+
+type Course @entity{
+  _id: ID! @column
+  title: String! @column
+  teacher: String @column
+  description: String! @column
+  topic: String @column
 }
 type Query {
   "Return all the courses"
