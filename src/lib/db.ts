@@ -13,7 +13,7 @@ export async function connectDB() {
       await client.connect();
       await client.db("admin").command({ ping: 1 });
       console.log("Connected successfully to server");
-      connection = await client.db();
+      connection = client.db();
     } catch (error) {
       console.error(error);
       process.exit(1)

@@ -11,3 +11,14 @@ type Query {
   courses: [Course]
   course(id: ID!): Course
 }
+
+input CourseInput {
+  title: String!
+  teacher: String
+  description: String!
+  topic: String
+}
+
+type Mutation {
+  createCourse(input: CourseInput!): Course
+}

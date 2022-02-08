@@ -4,7 +4,7 @@ import express from "express"
 import { graphqlHTTP } from "express-graphql";
 import { readFileSync } from "fs";
 import path from "path";
-import {resolvers} from "./lib/root"
+import {resolvers} from "./lib/resolvers"
 
 const app = express()
 const port = process.env.PORT || 3000

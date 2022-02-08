@@ -35,6 +35,23 @@ export type Course = {
   topic?: Maybe<Scalars['String']>;
 };
 
+export type Mutation = {
+  __typename?: 'Mutation';
+  createCourse?: Maybe<Course>;
+};
+
+
+export type MutationCreateCourseArgs = {
+  input: CourseInput;
+};
+
+export type CourseInput = {
+  description: Scalars['String'];
+  teacher?: InputMaybe<Scalars['String']>;
+  title: Scalars['String'];
+  topic?: InputMaybe<Scalars['String']>;
+};
+
 export type AdditionalEntityFields = {
   path?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<Scalars['String']>;
@@ -113,6 +130,8 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Course: ResolverTypeWrapper<Course>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  Mutation: ResolverTypeWrapper<{}>;
+  CourseInput: CourseInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   AdditionalEntityFields: AdditionalEntityFields;
 };
@@ -123,6 +142,8 @@ export type ResolversParentTypes = {
   ID: Scalars['ID'];
   Course: Course;
   String: Scalars['String'];
+  Mutation: {};
+  CourseInput: CourseInput;
   Boolean: Scalars['Boolean'];
   AdditionalEntityFields: AdditionalEntityFields;
 };
@@ -188,9 +209,14 @@ export type CourseResolvers<ContextType = any, ParentType extends ResolversParen
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createCourse?: Resolver<Maybe<ResolversTypes['Course']>, ParentType, ContextType, RequireFields<MutationCreateCourseArgs, 'input'>>;
+};
+
 export type Resolvers<ContextType = any> = {
   Query?: QueryResolvers<ContextType>;
   Course?: CourseResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
 };
 
 export type DirectiveResolvers<ContextType = any> = {
