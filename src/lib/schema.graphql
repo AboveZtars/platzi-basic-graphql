@@ -1,17 +1,19 @@
-
-type Course @entity{
+## Types
+type Course @entity {
   _id: ID! @column
   title: String! @column
   teacher: String @column
   description: String! @column
   topic: String @column
 }
-type Query {
-  "Return all the courses"
-  courses: [Course]
-  course(id: ID!): Course
+
+type Student @entity {
+  _id: ID! @column
+  name: String! @column
+  email: String! @column
 }
 
+## Inputs
 input CourseInput {
   title: String!
   teacher: String
@@ -19,6 +21,21 @@ input CourseInput {
   topic: String
 }
 
+input StudentInput {
+  name: String!
+  email: String!
+}
+
+## Queries and mutations
+type Query {
+  "Return courses"
+  courses: [Course]
+  course(id: ID!): Course
+  "Return students"
+  students: [Student]
+  student(id: ID!): Student
+}
 type Mutation {
   createCourse(input: CourseInput!): Course
+  createStudent(input: StudentInput!): Student
 }

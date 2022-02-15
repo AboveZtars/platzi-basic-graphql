@@ -17,12 +17,20 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   course?: Maybe<Course>;
-  /** Return all the courses */
+  /** Return courses */
   courses?: Maybe<Array<Maybe<Course>>>;
+  student?: Maybe<Student>;
+  /** Return students */
+  students?: Maybe<Array<Maybe<Student>>>;
 };
 
 
 export type QueryCourseArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryStudentArgs = {
   id: Scalars['ID'];
 };
 
@@ -35,9 +43,17 @@ export type Course = {
   topic?: Maybe<Scalars['String']>;
 };
 
+export type Student = {
+  __typename?: 'Student';
+  _id: Scalars['ID'];
+  email: Scalars['String'];
+  name: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createCourse?: Maybe<Course>;
+  createStudent?: Maybe<Student>;
 };
 
 
@@ -45,11 +61,21 @@ export type MutationCreateCourseArgs = {
   input: CourseInput;
 };
 
+
+export type MutationCreateStudentArgs = {
+  input: StudentInput;
+};
+
 export type CourseInput = {
   description: Scalars['String'];
   teacher?: InputMaybe<Scalars['String']>;
   title: Scalars['String'];
   topic?: InputMaybe<Scalars['String']>;
+};
+
+export type StudentInput = {
+  email: Scalars['String'];
+  name: Scalars['String'];
 };
 
 export type AdditionalEntityFields = {
@@ -130,8 +156,10 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Course: ResolverTypeWrapper<Course>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  Student: ResolverTypeWrapper<Student>;
   Mutation: ResolverTypeWrapper<{}>;
   CourseInput: CourseInput;
+  StudentInput: StudentInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   AdditionalEntityFields: AdditionalEntityFields;
 };
@@ -142,8 +170,10 @@ export type ResolversParentTypes = {
   ID: Scalars['ID'];
   Course: Course;
   String: Scalars['String'];
+  Student: Student;
   Mutation: {};
   CourseInput: CourseInput;
+  StudentInput: StudentInput;
   Boolean: Scalars['Boolean'];
   AdditionalEntityFields: AdditionalEntityFields;
 };
@@ -198,6 +228,8 @@ export type MapDirectiveResolver<Result, Parent, ContextType = any, Args = MapDi
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   course?: Resolver<Maybe<ResolversTypes['Course']>, ParentType, ContextType, RequireFields<QueryCourseArgs, 'id'>>;
   courses?: Resolver<Maybe<Array<Maybe<ResolversTypes['Course']>>>, ParentType, ContextType>;
+  student?: Resolver<Maybe<ResolversTypes['Student']>, ParentType, ContextType, RequireFields<QueryStudentArgs, 'id'>>;
+  students?: Resolver<Maybe<Array<Maybe<ResolversTypes['Student']>>>, ParentType, ContextType>;
 };
 
 export type CourseResolvers<ContextType = any, ParentType extends ResolversParentTypes['Course'] = ResolversParentTypes['Course']> = {
@@ -209,13 +241,22 @@ export type CourseResolvers<ContextType = any, ParentType extends ResolversParen
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type StudentResolvers<ContextType = any, ParentType extends ResolversParentTypes['Student'] = ResolversParentTypes['Student']> = {
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createCourse?: Resolver<Maybe<ResolversTypes['Course']>, ParentType, ContextType, RequireFields<MutationCreateCourseArgs, 'input'>>;
+  createStudent?: Resolver<Maybe<ResolversTypes['Student']>, ParentType, ContextType, RequireFields<MutationCreateStudentArgs, 'input'>>;
 };
 
 export type Resolvers<ContextType = any> = {
   Query?: QueryResolvers<ContextType>;
   Course?: CourseResolvers<ContextType>;
+  Student?: StudentResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
 };
 
@@ -237,4 +278,10 @@ export type CourseDbObject = {
   teacher?: Maybe<string>,
   title: string,
   topic?: Maybe<string>,
+};
+
+export type StudentDbObject = {
+  _id: string,
+  email: string,
+  name: string,
 };
