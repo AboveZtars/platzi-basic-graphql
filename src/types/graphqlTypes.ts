@@ -52,8 +52,12 @@ export type Student = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  /** Courses */
   createCourse?: Maybe<Course>;
+  /** Students */
   createStudent?: Maybe<Student>;
+  editCourse?: Maybe<Course>;
+  editStudent?: Maybe<Student>;
 };
 
 
@@ -66,6 +70,18 @@ export type MutationCreateStudentArgs = {
   input: StudentInput;
 };
 
+
+export type MutationEditCourseArgs = {
+  id: Scalars['ID'];
+  input: EditCourseInput;
+};
+
+
+export type MutationEditStudentArgs = {
+  id: Scalars['ID'];
+  input: EditStudentInput;
+};
+
 export type CourseInput = {
   description: Scalars['String'];
   teacher?: InputMaybe<Scalars['String']>;
@@ -76,6 +92,18 @@ export type CourseInput = {
 export type StudentInput = {
   email: Scalars['String'];
   name: Scalars['String'];
+};
+
+export type EditCourseInput = {
+  description?: InputMaybe<Scalars['String']>;
+  teacher?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
+  topic?: InputMaybe<Scalars['String']>;
+};
+
+export type EditStudentInput = {
+  email?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
 };
 
 export type AdditionalEntityFields = {
@@ -160,6 +188,8 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   CourseInput: CourseInput;
   StudentInput: StudentInput;
+  EditCourseInput: EditCourseInput;
+  EditStudentInput: EditStudentInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   AdditionalEntityFields: AdditionalEntityFields;
 };
@@ -174,6 +204,8 @@ export type ResolversParentTypes = {
   Mutation: {};
   CourseInput: CourseInput;
   StudentInput: StudentInput;
+  EditCourseInput: EditCourseInput;
+  EditStudentInput: EditStudentInput;
   Boolean: Scalars['Boolean'];
   AdditionalEntityFields: AdditionalEntityFields;
 };
@@ -251,6 +283,8 @@ export type StudentResolvers<ContextType = any, ParentType extends ResolversPare
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createCourse?: Resolver<Maybe<ResolversTypes['Course']>, ParentType, ContextType, RequireFields<MutationCreateCourseArgs, 'input'>>;
   createStudent?: Resolver<Maybe<ResolversTypes['Student']>, ParentType, ContextType, RequireFields<MutationCreateStudentArgs, 'input'>>;
+  editCourse?: Resolver<Maybe<ResolversTypes['Course']>, ParentType, ContextType, RequireFields<MutationEditCourseArgs, 'id' | 'input'>>;
+  editStudent?: Resolver<Maybe<ResolversTypes['Student']>, ParentType, ContextType, RequireFields<MutationEditStudentArgs, 'id' | 'input'>>;
 };
 
 export type Resolvers<ContextType = any> = {
