@@ -28,7 +28,9 @@ export const queries: QueryResolvers = {
     let course;
     try {
       db = await connectDB();
-      course = db?.collection(`courses`).findOne({ _id: args.id }) as any;
+      course = db
+        ?.collection(`courses`)
+        .findOne({ _id: new ObjectId(args.id) }) as any;
     } catch (err: any) {
       console.error(err);
     }

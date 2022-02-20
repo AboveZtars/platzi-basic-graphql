@@ -5,6 +5,7 @@ type Course @entity {
   teacher: String @column
   description: String! @column
   topic: String @column
+  students: [Student] @column
 }
 
 type Student @entity {
@@ -51,7 +52,10 @@ type Mutation {
   "Courses"
   createCourse(input: CourseInput!): Course
   editCourse(id: ID!, input: EditCourseInput!): Course
+  deleteCourse(id: ID!): [Course]
+  addStudent(courseId: ID!, studentId: ID!): Course
   "Students"
   createStudent(input: StudentInput!): Student
   editStudent(id: ID!, input: EditStudentInput!): Student
+  deleteStudent(id: ID!): [Student]
 }

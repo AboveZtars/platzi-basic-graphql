@@ -38,6 +38,7 @@ export type Course = {
   __typename?: 'Course';
   _id: Scalars['ID'];
   description: Scalars['String'];
+  students?: Maybe<Array<Maybe<Student>>>;
   teacher?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   topic?: Maybe<Scalars['String']>;
@@ -52,12 +53,21 @@ export type Student = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addStudent?: Maybe<Course>;
   /** Courses */
   createCourse?: Maybe<Course>;
   /** Students */
   createStudent?: Maybe<Student>;
+  deleteCourse?: Maybe<Array<Maybe<Course>>>;
+  deleteStudent?: Maybe<Array<Maybe<Student>>>;
   editCourse?: Maybe<Course>;
   editStudent?: Maybe<Student>;
+};
+
+
+export type MutationAddStudentArgs = {
+  courseId: Scalars['ID'];
+  studentId: Scalars['ID'];
 };
 
 
@@ -68,6 +78,16 @@ export type MutationCreateCourseArgs = {
 
 export type MutationCreateStudentArgs = {
   input: StudentInput;
+};
+
+
+export type MutationDeleteCourseArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationDeleteStudentArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -267,6 +287,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 export type CourseResolvers<ContextType = any, ParentType extends ResolversParentTypes['Course'] = ResolversParentTypes['Course']> = {
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  students?: Resolver<Maybe<Array<Maybe<ResolversTypes['Student']>>>, ParentType, ContextType>;
   teacher?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   topic?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -281,8 +302,11 @@ export type StudentResolvers<ContextType = any, ParentType extends ResolversPare
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  addStudent?: Resolver<Maybe<ResolversTypes['Course']>, ParentType, ContextType, RequireFields<MutationAddStudentArgs, 'courseId' | 'studentId'>>;
   createCourse?: Resolver<Maybe<ResolversTypes['Course']>, ParentType, ContextType, RequireFields<MutationCreateCourseArgs, 'input'>>;
   createStudent?: Resolver<Maybe<ResolversTypes['Student']>, ParentType, ContextType, RequireFields<MutationCreateStudentArgs, 'input'>>;
+  deleteCourse?: Resolver<Maybe<Array<Maybe<ResolversTypes['Course']>>>, ParentType, ContextType, RequireFields<MutationDeleteCourseArgs, 'id'>>;
+  deleteStudent?: Resolver<Maybe<Array<Maybe<ResolversTypes['Student']>>>, ParentType, ContextType, RequireFields<MutationDeleteStudentArgs, 'id'>>;
   editCourse?: Resolver<Maybe<ResolversTypes['Course']>, ParentType, ContextType, RequireFields<MutationEditCourseArgs, 'id' | 'input'>>;
   editStudent?: Resolver<Maybe<ResolversTypes['Student']>, ParentType, ContextType, RequireFields<MutationEditStudentArgs, 'id' | 'input'>>;
 };
@@ -309,6 +333,7 @@ import { ObjectId } from 'mongodb';
 export type CourseDbObject = {
   _id: string,
   description: string,
+  students?: Maybe<Array<Maybe<Student>>>,
   teacher?: Maybe<string>,
   title: string,
   topic?: Maybe<string>,
