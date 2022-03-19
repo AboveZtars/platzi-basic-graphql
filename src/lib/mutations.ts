@@ -7,6 +7,7 @@ import {
   EditStudentInput,
 } from "../types/graphqlTypes";
 import { connectDB } from "./db";
+import { errorHandler } from "./errorHandler";
 
 export const mutations: MutationResolvers = {
   //Courses
@@ -17,7 +18,7 @@ export const mutations: MutationResolvers = {
       db.collection("courses").insertOne(args.input);
       return args.input as any;
     } catch (error) {
-      console.error(error);
+      errorHandler(error);
     }
   },
   editCourse: async (
@@ -33,7 +34,7 @@ export const mutations: MutationResolvers = {
       );
       return { _id: args.id, ...args.input } as any;
     } catch (error) {
-      console.error(error);
+      errorHandler(error);
     }
   },
   deleteCourse: async (root: any, args: { id: string }) => {
@@ -47,7 +48,7 @@ export const mutations: MutationResolvers = {
         .toArray()) as any;
       return response;
     } catch (error) {
-      console.error(error);
+      errorHandler(error);
     }
   },
   addStudent: async (
@@ -72,7 +73,7 @@ export const mutations: MutationResolvers = {
       }
       return course as any;
     } catch (error) {
-      console.error(error);
+      errorHandler(error);
     }
   },
 
@@ -84,7 +85,7 @@ export const mutations: MutationResolvers = {
       db.collection("students").insertOne(args.input);
       return args.input as any;
     } catch (error) {
-      console.error(error);
+      errorHandler(error);
     }
   },
   editStudent: async (
@@ -100,7 +101,7 @@ export const mutations: MutationResolvers = {
       );
       return { id: args.id, ...args.input } as any;
     } catch (error) {
-      console.error(error);
+      errorHandler(error);
     }
   },
   deleteStudent: async (root: any, args: { id: string }) => {
@@ -114,7 +115,7 @@ export const mutations: MutationResolvers = {
         .toArray()) as any;
       return response;
     } catch (error) {
-      console.error(error);
+      errorHandler(error);
     }
   },
 };

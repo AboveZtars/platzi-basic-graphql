@@ -6,6 +6,7 @@ import {
   StudentDbObject,
 } from "../types/graphqlTypes";
 import { connectDB } from "./db";
+import { errorHandler } from "./errorHandler";
 
 export const queries: QueryResolvers = {
   // Courses
@@ -18,7 +19,7 @@ export const queries: QueryResolvers = {
       console.log(courses);
       //console.log(db)
     } catch (err: any) {
-      console.error(err);
+      errorHandler(err);
     }
     return courses as CourseDbObject[];
   },
@@ -32,7 +33,7 @@ export const queries: QueryResolvers = {
         ?.collection(`courses`)
         .findOne({ _id: new ObjectId(args.id) }) as any;
     } catch (err: any) {
-      console.error(err);
+      errorHandler(err);
     }
     return course as CourseDbObject;
   },
@@ -46,7 +47,7 @@ export const queries: QueryResolvers = {
       console.log(students);
       //console.log(db)
     } catch (err: any) {
-      console.error(err);
+      errorHandler(err);
     }
     return students as StudentDbObject[];
   },
@@ -60,7 +61,7 @@ export const queries: QueryResolvers = {
         .findOne({ _id: new ObjectId(args.id) })) as any;
       console.log(student);
     } catch (err: any) {
-      console.error(err);
+      errorHandler(err);
     }
     return student as StudentDbObject;
   },

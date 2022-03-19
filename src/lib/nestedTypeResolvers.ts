@@ -3,6 +3,7 @@
 import { connectDB } from "./db";
 import { Db, ObjectId } from "mongodb";
 import { CourseResolvers } from "../types/graphqlTypes";
+import { errorHandler } from "./errorHandler";
 
 export const Course: CourseResolvers = {
   students: async (args: any) => {
@@ -23,7 +24,7 @@ export const Course: CourseResolvers = {
               .toArray()
           : [];
     } catch (error) {
-      console.log(error);
+      errorHandler(error);
     }
     return studentsData as any;
   },
