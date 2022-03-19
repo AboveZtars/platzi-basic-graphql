@@ -57,7 +57,7 @@
             "deprecationReason": null
           },
           {
-            "name": "student",
+            "name": "person",
             "description": null,
             "args": [
               {
@@ -76,23 +76,23 @@
               }
             ],
             "type": {
-              "kind": "OBJECT",
-              "name": "Student",
+              "kind": "INTERFACE",
+              "name": "Person",
               "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "students",
+            "name": "persons",
             "description": "Return students",
             "args": [],
             "type": {
               "kind": "LIST",
               "name": null,
               "ofType": {
-                "kind": "OBJECT",
-                "name": "Student",
+                "kind": "INTERFACE",
+                "name": "Person",
                 "ofType": null
               }
             },
@@ -148,6 +148,18 @@
                 "name": "String",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "level",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "Level",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -225,8 +237,114 @@
         "possibleTypes": null
       },
       {
+        "kind": "ENUM",
+        "name": "Level",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "advance",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "intermediate",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "noob",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
         "kind": "OBJECT",
         "name": "Student",
+        "description": null,
+        "fields": [
+          {
+            "name": "_id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "avatar",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "email",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "name",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "Person",
+            "ofType": null
+          }
+        ],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "Person",
         "description": null,
         "fields": [
           {
@@ -279,9 +397,20 @@
           }
         ],
         "inputFields": null,
-        "interfaces": [],
+        "interfaces": null,
         "enumValues": null,
-        "possibleTypes": null
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "Student",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "Monitor",
+            "ofType": null
+          }
+        ]
       },
       {
         "kind": "OBJECT",
@@ -307,7 +436,7 @@
                 "defaultValue": null
               },
               {
-                "name": "studentId",
+                "name": "personId",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
@@ -357,8 +486,8 @@
             "deprecationReason": null
           },
           {
-            "name": "createStudent",
-            "description": "Students",
+            "name": "createPerson",
+            "description": "Person",
             "args": [
               {
                 "name": "input",
@@ -368,7 +497,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "StudentInput",
+                    "name": "PersonInput",
                     "ofType": null
                   }
                 },
@@ -376,8 +505,8 @@
               }
             ],
             "type": {
-              "kind": "OBJECT",
-              "name": "Student",
+              "kind": "INTERFACE",
+              "name": "Person",
               "ofType": null
             },
             "isDeprecated": false,
@@ -415,7 +544,7 @@
             "deprecationReason": null
           },
           {
-            "name": "deleteStudent",
+            "name": "deletePerson",
             "description": null,
             "args": [
               {
@@ -437,8 +566,8 @@
               "kind": "LIST",
               "name": null,
               "ofType": {
-                "kind": "OBJECT",
-                "name": "Student",
+                "kind": "INTERFACE",
+                "name": "Person",
                 "ofType": null
               }
             },
@@ -487,7 +616,7 @@
             "deprecationReason": null
           },
           {
-            "name": "editStudent",
+            "name": "editPerson",
             "description": null,
             "args": [
               {
@@ -512,7 +641,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "EditStudentInput",
+                    "name": "EditPersonInput",
                     "ofType": null
                   }
                 },
@@ -520,8 +649,8 @@
               }
             ],
             "type": {
-              "kind": "OBJECT",
-              "name": "Student",
+              "kind": "INTERFACE",
+              "name": "Person",
               "ofType": null
             },
             "isDeprecated": false,
@@ -550,6 +679,16 @@
                 "name": "String",
                 "ofType": null
               }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "level",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "Level",
+              "ofType": null
             },
             "defaultValue": null
           },
@@ -594,10 +733,20 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "StudentInput",
+        "name": "PersonInput",
         "description": null,
         "fields": null,
         "inputFields": [
+          {
+            "name": "avatar",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
           {
             "name": "email",
             "description": null,
@@ -623,6 +772,16 @@
                 "name": "String",
                 "ofType": null
               }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "phone",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "defaultValue": null
           }
@@ -684,10 +843,20 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "EditStudentInput",
+        "name": "EditPersonInput",
         "description": null,
         "fields": null,
         "inputFields": [
+          {
+            "name": "avatar",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
           {
             "name": "email",
             "description": null,
@@ -700,6 +869,16 @@
           },
           {
             "name": "name",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "phone",
             "description": null,
             "type": {
               "kind": "SCALAR",
@@ -1517,6 +1696,83 @@
             "deprecationReason": null
           }
         ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Monitor",
+        "description": null,
+        "fields": [
+          {
+            "name": "_id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "email",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "name",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "phone",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "Person",
+            "ofType": null
+          }
+        ],
+        "enumValues": null,
         "possibleTypes": null
       }
     ],

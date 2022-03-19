@@ -1,10 +1,6 @@
 "use strict";
 import { Db, ObjectId } from "mongodb";
-import {
-  CourseDbObject,
-  QueryResolvers,
-  StudentDbObject,
-} from "../types/graphqlTypes";
+import { CourseDbObject, QueryResolvers } from "../types/graphqlTypes";
 import { connectDB } from "./db";
 import { errorHandler } from "./errorHandler";
 
@@ -17,7 +13,6 @@ export const queries: QueryResolvers = {
       db = await connectDB();
       courses = (await db?.collection(`courses`).find().toArray()) as any;
       console.log(courses);
-      //console.log(db)
     } catch (err: any) {
       errorHandler(err);
     }
@@ -37,32 +32,31 @@ export const queries: QueryResolvers = {
     }
     return course as CourseDbObject;
   },
-  // Students
-  students: async () => {
+  // Person
+  persons: async () => {
     let db: Db | undefined;
-    let students;
+    let persons;
     try {
       db = await connectDB();
-      students = (await db?.collection(`students`).find().toArray()) as any;
-      console.log(students);
-      //console.log(db)
+      persons = (await db?.collection(`students`).find().toArray()) as any;
+      console.log(persons);
     } catch (err: any) {
       errorHandler(err);
     }
-    return students as StudentDbObject[];
+    return persons;
   },
-  student: async (root: any, args: any) => {
+  person: async (root: any, args: any) => {
     let db: Db | undefined;
-    let student;
+    let person;
     try {
       db = await connectDB();
-      student = (await db
+      person = (await db
         ?.collection(`students`)
         .findOne({ _id: new ObjectId(args.id) })) as any;
-      console.log(student);
+      console.log(person);
     } catch (err: any) {
       errorHandler(err);
     }
-    return student as StudentDbObject;
+    return person;
   },
 };

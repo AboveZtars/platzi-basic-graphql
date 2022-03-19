@@ -2,9 +2,9 @@ import { Db, ObjectId } from "mongodb";
 import {
   CourseInput,
   EditCourseInput,
-  StudentInput,
+  PersonInput,
   MutationResolvers,
-  EditStudentInput,
+  EditPersonInput,
 } from "../types/graphqlTypes";
 import { connectDB } from "./db";
 import { errorHandler } from "./errorHandler";
@@ -53,7 +53,7 @@ export const mutations: MutationResolvers = {
   },
   addStudent: async (
     root: any,
-    args: { courseId: string; studentId: string }
+    args: { courseId: string; personId: string }
   ) => {
     let db: Db | undefined | null;
     try {
@@ -63,12 +63,12 @@ export const mutations: MutationResolvers = {
         .findOne({ _id: new ObjectId(args.courseId) });
       let student = await db
         ?.collection(`students`)
-        .findOne({ _id: new ObjectId(args.studentId) });
+        .findOne({ _id: new ObjectId(args.personId) });
 
       if (course && student) {
         db.collection("courses").updateOne(
           { _id: new ObjectId(args.courseId) },
-          { $addToSet: { students: new ObjectId(args.studentId) } }
+          { $addToSet: { students: new ObjectId(args.personId) } }
         );
       }
       return course as any;
@@ -77,8 +77,8 @@ export const mutations: MutationResolvers = {
     }
   },
 
-  //Students
-  createStudent: async (root: any, args: { input: StudentInput }) => {
+  //Persons
+  createPerson: async (root: any, args: { input: PersonInput }) => {
     let db: Db | undefined | null;
     try {
       db = await connectDB();
@@ -88,9 +88,9 @@ export const mutations: MutationResolvers = {
       errorHandler(error);
     }
   },
-  editStudent: async (
+  editPerson: async (
     root: any,
-    args: { id: string; input: EditStudentInput }
+    args: { id: string; input: EditPersonInput }
   ) => {
     let db: Db | undefined | null;
     try {
@@ -104,7 +104,7 @@ export const mutations: MutationResolvers = {
       errorHandler(error);
     }
   },
-  deleteStudent: async (root: any, args: { id: string }) => {
+  deletePerson: async (root: any, args: { id: string }) => {
     let db: Db | undefined | null;
     try {
       db = await connectDB();

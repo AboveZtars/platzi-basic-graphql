@@ -1,3 +1,15 @@
+#### Level
+enum Level {
+  noob
+  intermediate
+  advance
+}
+#### Interfaces
+interface Person {
+  _id: ID! @column
+  name: String! @column
+  email: String! @column
+}
 #### Types
 type Course @entity {
   _id: ID! @column
@@ -6,14 +18,22 @@ type Course @entity {
   description: String! @column
   topic: String @column
   students: [Student] @column
+  level: Level
 }
 
-type Student @entity {
+type Student implements Person @entity {
   _id: ID! @column
   name: String! @column
   email: String! @column
+  avatar: String @column
 }
 
+type Monitor implements Person @entity {
+  _id: ID! @column
+  name: String! @column
+  email: String! @column
+  phone: String @column
+}
 #### Inputs
 ## Courses
 input CourseInput {
@@ -21,6 +41,7 @@ input CourseInput {
   teacher: String
   description: String!
   topic: String
+  level: Level
 }
 
 input EditCourseInput {
@@ -30,14 +51,18 @@ input EditCourseInput {
   topic: String
 }
 ## Students
-input StudentInput {
+input PersonInput {
   name: String!
   email: String!
+  avatar: String
+  phone: String
 }
 
-input EditStudentInput {
+input EditPersonInput {
   name: String
   email: String
+  avatar: String
+  phone: String
 }
 #### Queries and mutations
 type Query {
@@ -45,17 +70,17 @@ type Query {
   courses: [Course]
   course(id: ID!): Course
   "Return students"
-  students: [Student]
-  student(id: ID!): Student
+  persons: [Person]
+  person(id: ID!): Person
 }
 type Mutation {
   "Courses"
   createCourse(input: CourseInput!): Course
   editCourse(id: ID!, input: EditCourseInput!): Course
   deleteCourse(id: ID!): [Course]
-  addStudent(courseId: ID!, studentId: ID!): Course
-  "Students"
-  createStudent(input: StudentInput!): Student
-  editStudent(id: ID!, input: EditStudentInput!): Student
-  deleteStudent(id: ID!): [Student]
+  addStudent(courseId: ID!, personId: ID!): Course
+  "Person"
+  createPerson(input: PersonInput!): Person
+  editPerson(id: ID!, input: EditPersonInput!): Person
+  deletePerson(id: ID!): [Person]
 }

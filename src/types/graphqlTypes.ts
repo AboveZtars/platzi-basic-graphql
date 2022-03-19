@@ -19,9 +19,9 @@ export type Query = {
   course?: Maybe<Course>;
   /** Return courses */
   courses?: Maybe<Array<Maybe<Course>>>;
-  student?: Maybe<Student>;
+  person?: Maybe<Person>;
   /** Return students */
-  students?: Maybe<Array<Maybe<Student>>>;
+  persons?: Maybe<Array<Maybe<Person>>>;
 };
 
 
@@ -30,7 +30,7 @@ export type QueryCourseArgs = {
 };
 
 
-export type QueryStudentArgs = {
+export type QueryPersonArgs = {
   id: Scalars['ID'];
 };
 
@@ -38,14 +38,28 @@ export type Course = {
   __typename?: 'Course';
   _id: Scalars['ID'];
   description: Scalars['String'];
+  level?: Maybe<Level>;
   students?: Maybe<Array<Maybe<Student>>>;
   teacher?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   topic?: Maybe<Scalars['String']>;
 };
 
-export type Student = {
+export enum Level {
+  Advance = 'advance',
+  Intermediate = 'intermediate',
+  Noob = 'noob'
+}
+
+export type Student = Person & {
   __typename?: 'Student';
+  _id: Scalars['ID'];
+  avatar?: Maybe<Scalars['String']>;
+  email: Scalars['String'];
+  name: Scalars['String'];
+};
+
+export type Person = {
   _id: Scalars['ID'];
   email: Scalars['String'];
   name: Scalars['String'];
@@ -56,18 +70,18 @@ export type Mutation = {
   addStudent?: Maybe<Course>;
   /** Courses */
   createCourse?: Maybe<Course>;
-  /** Students */
-  createStudent?: Maybe<Student>;
+  /** Person */
+  createPerson?: Maybe<Person>;
   deleteCourse?: Maybe<Array<Maybe<Course>>>;
-  deleteStudent?: Maybe<Array<Maybe<Student>>>;
+  deletePerson?: Maybe<Array<Maybe<Person>>>;
   editCourse?: Maybe<Course>;
-  editStudent?: Maybe<Student>;
+  editPerson?: Maybe<Person>;
 };
 
 
 export type MutationAddStudentArgs = {
   courseId: Scalars['ID'];
-  studentId: Scalars['ID'];
+  personId: Scalars['ID'];
 };
 
 
@@ -76,8 +90,8 @@ export type MutationCreateCourseArgs = {
 };
 
 
-export type MutationCreateStudentArgs = {
-  input: StudentInput;
+export type MutationCreatePersonArgs = {
+  input: PersonInput;
 };
 
 
@@ -86,7 +100,7 @@ export type MutationDeleteCourseArgs = {
 };
 
 
-export type MutationDeleteStudentArgs = {
+export type MutationDeletePersonArgs = {
   id: Scalars['ID'];
 };
 
@@ -97,21 +111,24 @@ export type MutationEditCourseArgs = {
 };
 
 
-export type MutationEditStudentArgs = {
+export type MutationEditPersonArgs = {
   id: Scalars['ID'];
-  input: EditStudentInput;
+  input: EditPersonInput;
 };
 
 export type CourseInput = {
   description: Scalars['String'];
+  level?: InputMaybe<Level>;
   teacher?: InputMaybe<Scalars['String']>;
   title: Scalars['String'];
   topic?: InputMaybe<Scalars['String']>;
 };
 
-export type StudentInput = {
+export type PersonInput = {
+  avatar?: InputMaybe<Scalars['String']>;
   email: Scalars['String'];
   name: Scalars['String'];
+  phone?: InputMaybe<Scalars['String']>;
 };
 
 export type EditCourseInput = {
@@ -121,14 +138,24 @@ export type EditCourseInput = {
   topic?: InputMaybe<Scalars['String']>;
 };
 
-export type EditStudentInput = {
+export type EditPersonInput = {
+  avatar?: InputMaybe<Scalars['String']>;
   email?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
+  phone?: InputMaybe<Scalars['String']>;
 };
 
 export type AdditionalEntityFields = {
   path?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<Scalars['String']>;
+};
+
+export type Monitor = Person & {
+  __typename?: 'Monitor';
+  _id: Scalars['ID'];
+  email: Scalars['String'];
+  name: Scalars['String'];
+  phone?: Maybe<Scalars['String']>;
 };
 
 
@@ -204,14 +231,17 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Course: ResolverTypeWrapper<Course>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  Level: Level;
   Student: ResolverTypeWrapper<Student>;
+  Person: ResolversTypes['Student'] | ResolversTypes['Monitor'];
   Mutation: ResolverTypeWrapper<{}>;
   CourseInput: CourseInput;
-  StudentInput: StudentInput;
+  PersonInput: PersonInput;
   EditCourseInput: EditCourseInput;
-  EditStudentInput: EditStudentInput;
+  EditPersonInput: EditPersonInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   AdditionalEntityFields: AdditionalEntityFields;
+  Monitor: ResolverTypeWrapper<Monitor>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -221,13 +251,15 @@ export type ResolversParentTypes = {
   Course: Course;
   String: Scalars['String'];
   Student: Student;
+  Person: ResolversParentTypes['Student'] | ResolversParentTypes['Monitor'];
   Mutation: {};
   CourseInput: CourseInput;
-  StudentInput: StudentInput;
+  PersonInput: PersonInput;
   EditCourseInput: EditCourseInput;
-  EditStudentInput: EditStudentInput;
+  EditPersonInput: EditPersonInput;
   Boolean: Scalars['Boolean'];
   AdditionalEntityFields: AdditionalEntityFields;
+  Monitor: Monitor;
 };
 
 export type UnionDirectiveArgs = {
@@ -280,13 +312,14 @@ export type MapDirectiveResolver<Result, Parent, ContextType = any, Args = MapDi
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   course?: Resolver<Maybe<ResolversTypes['Course']>, ParentType, ContextType, RequireFields<QueryCourseArgs, 'id'>>;
   courses?: Resolver<Maybe<Array<Maybe<ResolversTypes['Course']>>>, ParentType, ContextType>;
-  student?: Resolver<Maybe<ResolversTypes['Student']>, ParentType, ContextType, RequireFields<QueryStudentArgs, 'id'>>;
-  students?: Resolver<Maybe<Array<Maybe<ResolversTypes['Student']>>>, ParentType, ContextType>;
+  person?: Resolver<Maybe<ResolversTypes['Person']>, ParentType, ContextType, RequireFields<QueryPersonArgs, 'id'>>;
+  persons?: Resolver<Maybe<Array<Maybe<ResolversTypes['Person']>>>, ParentType, ContextType>;
 };
 
 export type CourseResolvers<ContextType = any, ParentType extends ResolversParentTypes['Course'] = ResolversParentTypes['Course']> = {
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  level?: Resolver<Maybe<ResolversTypes['Level']>, ParentType, ContextType>;
   students?: Resolver<Maybe<Array<Maybe<ResolversTypes['Student']>>>, ParentType, ContextType>;
   teacher?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -296,26 +329,44 @@ export type CourseResolvers<ContextType = any, ParentType extends ResolversParen
 
 export type StudentResolvers<ContextType = any, ParentType extends ResolversParentTypes['Student'] = ResolversParentTypes['Student']> = {
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type PersonResolvers<ContextType = any, ParentType extends ResolversParentTypes['Person'] = ResolversParentTypes['Person']> = {
+  __resolveType: TypeResolveFn<'Student' | 'Monitor', ParentType, ContextType>;
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  addStudent?: Resolver<Maybe<ResolversTypes['Course']>, ParentType, ContextType, RequireFields<MutationAddStudentArgs, 'courseId' | 'studentId'>>;
+  addStudent?: Resolver<Maybe<ResolversTypes['Course']>, ParentType, ContextType, RequireFields<MutationAddStudentArgs, 'courseId' | 'personId'>>;
   createCourse?: Resolver<Maybe<ResolversTypes['Course']>, ParentType, ContextType, RequireFields<MutationCreateCourseArgs, 'input'>>;
-  createStudent?: Resolver<Maybe<ResolversTypes['Student']>, ParentType, ContextType, RequireFields<MutationCreateStudentArgs, 'input'>>;
+  createPerson?: Resolver<Maybe<ResolversTypes['Person']>, ParentType, ContextType, RequireFields<MutationCreatePersonArgs, 'input'>>;
   deleteCourse?: Resolver<Maybe<Array<Maybe<ResolversTypes['Course']>>>, ParentType, ContextType, RequireFields<MutationDeleteCourseArgs, 'id'>>;
-  deleteStudent?: Resolver<Maybe<Array<Maybe<ResolversTypes['Student']>>>, ParentType, ContextType, RequireFields<MutationDeleteStudentArgs, 'id'>>;
+  deletePerson?: Resolver<Maybe<Array<Maybe<ResolversTypes['Person']>>>, ParentType, ContextType, RequireFields<MutationDeletePersonArgs, 'id'>>;
   editCourse?: Resolver<Maybe<ResolversTypes['Course']>, ParentType, ContextType, RequireFields<MutationEditCourseArgs, 'id' | 'input'>>;
-  editStudent?: Resolver<Maybe<ResolversTypes['Student']>, ParentType, ContextType, RequireFields<MutationEditStudentArgs, 'id' | 'input'>>;
+  editPerson?: Resolver<Maybe<ResolversTypes['Person']>, ParentType, ContextType, RequireFields<MutationEditPersonArgs, 'id' | 'input'>>;
+};
+
+export type MonitorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Monitor'] = ResolversParentTypes['Monitor']> = {
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  phone?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
   Query?: QueryResolvers<ContextType>;
   Course?: CourseResolvers<ContextType>;
   Student?: StudentResolvers<ContextType>;
+  Person?: PersonResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  Monitor?: MonitorResolvers<ContextType>;
 };
 
 export type DirectiveResolvers<ContextType = any> = {
@@ -341,6 +392,14 @@ export type CourseDbObject = {
 
 export type StudentDbObject = {
   _id: string,
+  avatar?: Maybe<string>,
   email: string,
   name: string,
+};
+
+export type MonitorDbObject = {
+  _id: string,
+  email: string,
+  name: string,
+  phone?: Maybe<string>,
 };
