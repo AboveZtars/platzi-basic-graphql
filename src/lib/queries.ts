@@ -59,4 +59,27 @@ export const queries: QueryResolvers = {
     }
     return person;
   },
+  //Items
+  items: async (root: any, args: { keyword: string }) => {
+    let db: Db | undefined;
+    let courses;
+    let persons;
+    let items;
+
+    try {
+      db = await connectDB();
+      courses = await db
+        .collection(`courses`)
+        .find({ $text: { $search: args.keyword } })
+        .toArray();
+      persons = await db
+        .collection(`students`)
+        .find({ $text: { $search: args.keyword } })
+        .toArray();
+      items = [...courses, ...persons];
+    } catch (error) {
+      errorHandler(error);
+    }
+    return items as [];
+  },
 };

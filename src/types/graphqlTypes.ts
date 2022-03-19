@@ -19,6 +19,8 @@ export type Query = {
   course?: Maybe<Course>;
   /** Return courses */
   courses?: Maybe<Array<Maybe<Course>>>;
+  /** Global Search */
+  items?: Maybe<Array<Maybe<GlobalSearch>>>;
   person?: Maybe<Person>;
   /** Return students */
   persons?: Maybe<Array<Maybe<Person>>>;
@@ -27,6 +29,11 @@ export type Query = {
 
 export type QueryCourseArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryItemsArgs = {
+  keyword: Scalars['String'];
 };
 
 
@@ -63,6 +70,16 @@ export type Person = {
   _id: Scalars['ID'];
   email: Scalars['String'];
   name: Scalars['String'];
+};
+
+export type GlobalSearch = Course | Monitor | Student;
+
+export type Monitor = Person & {
+  __typename?: 'Monitor';
+  _id: Scalars['ID'];
+  email: Scalars['String'];
+  name: Scalars['String'];
+  phone?: Maybe<Scalars['String']>;
 };
 
 export type Mutation = {
@@ -150,14 +167,6 @@ export type AdditionalEntityFields = {
   type?: InputMaybe<Scalars['String']>;
 };
 
-export type Monitor = Person & {
-  __typename?: 'Monitor';
-  _id: Scalars['ID'];
-  email: Scalars['String'];
-  name: Scalars['String'];
-  phone?: Maybe<Scalars['String']>;
-};
-
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -234,6 +243,8 @@ export type ResolversTypes = {
   Level: Level;
   Student: ResolverTypeWrapper<Student>;
   Person: ResolversTypes['Student'] | ResolversTypes['Monitor'];
+  GlobalSearch: ResolversTypes['Course'] | ResolversTypes['Monitor'] | ResolversTypes['Student'];
+  Monitor: ResolverTypeWrapper<Monitor>;
   Mutation: ResolverTypeWrapper<{}>;
   CourseInput: CourseInput;
   PersonInput: PersonInput;
@@ -241,7 +252,6 @@ export type ResolversTypes = {
   EditPersonInput: EditPersonInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   AdditionalEntityFields: AdditionalEntityFields;
-  Monitor: ResolverTypeWrapper<Monitor>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -252,6 +262,8 @@ export type ResolversParentTypes = {
   String: Scalars['String'];
   Student: Student;
   Person: ResolversParentTypes['Student'] | ResolversParentTypes['Monitor'];
+  GlobalSearch: ResolversParentTypes['Course'] | ResolversParentTypes['Monitor'] | ResolversParentTypes['Student'];
+  Monitor: Monitor;
   Mutation: {};
   CourseInput: CourseInput;
   PersonInput: PersonInput;
@@ -259,7 +271,6 @@ export type ResolversParentTypes = {
   EditPersonInput: EditPersonInput;
   Boolean: Scalars['Boolean'];
   AdditionalEntityFields: AdditionalEntityFields;
-  Monitor: Monitor;
 };
 
 export type UnionDirectiveArgs = {
@@ -312,6 +323,7 @@ export type MapDirectiveResolver<Result, Parent, ContextType = any, Args = MapDi
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   course?: Resolver<Maybe<ResolversTypes['Course']>, ParentType, ContextType, RequireFields<QueryCourseArgs, 'id'>>;
   courses?: Resolver<Maybe<Array<Maybe<ResolversTypes['Course']>>>, ParentType, ContextType>;
+  items?: Resolver<Maybe<Array<Maybe<ResolversTypes['GlobalSearch']>>>, ParentType, ContextType, RequireFields<QueryItemsArgs, 'keyword'>>;
   person?: Resolver<Maybe<ResolversTypes['Person']>, ParentType, ContextType, RequireFields<QueryPersonArgs, 'id'>>;
   persons?: Resolver<Maybe<Array<Maybe<ResolversTypes['Person']>>>, ParentType, ContextType>;
 };
@@ -342,14 +354,8 @@ export type PersonResolvers<ContextType = any, ParentType extends ResolversParen
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 };
 
-export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  addStudent?: Resolver<Maybe<ResolversTypes['Course']>, ParentType, ContextType, RequireFields<MutationAddStudentArgs, 'courseId' | 'personId'>>;
-  createCourse?: Resolver<Maybe<ResolversTypes['Course']>, ParentType, ContextType, RequireFields<MutationCreateCourseArgs, 'input'>>;
-  createPerson?: Resolver<Maybe<ResolversTypes['Person']>, ParentType, ContextType, RequireFields<MutationCreatePersonArgs, 'input'>>;
-  deleteCourse?: Resolver<Maybe<Array<Maybe<ResolversTypes['Course']>>>, ParentType, ContextType, RequireFields<MutationDeleteCourseArgs, 'id'>>;
-  deletePerson?: Resolver<Maybe<Array<Maybe<ResolversTypes['Person']>>>, ParentType, ContextType, RequireFields<MutationDeletePersonArgs, 'id'>>;
-  editCourse?: Resolver<Maybe<ResolversTypes['Course']>, ParentType, ContextType, RequireFields<MutationEditCourseArgs, 'id' | 'input'>>;
-  editPerson?: Resolver<Maybe<ResolversTypes['Person']>, ParentType, ContextType, RequireFields<MutationEditPersonArgs, 'id' | 'input'>>;
+export type GlobalSearchResolvers<ContextType = any, ParentType extends ResolversParentTypes['GlobalSearch'] = ResolversParentTypes['GlobalSearch']> = {
+  __resolveType: TypeResolveFn<'Course' | 'Monitor' | 'Student', ParentType, ContextType>;
 };
 
 export type MonitorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Monitor'] = ResolversParentTypes['Monitor']> = {
@@ -360,13 +366,24 @@ export type MonitorResolvers<ContextType = any, ParentType extends ResolversPare
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  addStudent?: Resolver<Maybe<ResolversTypes['Course']>, ParentType, ContextType, RequireFields<MutationAddStudentArgs, 'courseId' | 'personId'>>;
+  createCourse?: Resolver<Maybe<ResolversTypes['Course']>, ParentType, ContextType, RequireFields<MutationCreateCourseArgs, 'input'>>;
+  createPerson?: Resolver<Maybe<ResolversTypes['Person']>, ParentType, ContextType, RequireFields<MutationCreatePersonArgs, 'input'>>;
+  deleteCourse?: Resolver<Maybe<Array<Maybe<ResolversTypes['Course']>>>, ParentType, ContextType, RequireFields<MutationDeleteCourseArgs, 'id'>>;
+  deletePerson?: Resolver<Maybe<Array<Maybe<ResolversTypes['Person']>>>, ParentType, ContextType, RequireFields<MutationDeletePersonArgs, 'id'>>;
+  editCourse?: Resolver<Maybe<ResolversTypes['Course']>, ParentType, ContextType, RequireFields<MutationEditCourseArgs, 'id' | 'input'>>;
+  editPerson?: Resolver<Maybe<ResolversTypes['Person']>, ParentType, ContextType, RequireFields<MutationEditPersonArgs, 'id' | 'input'>>;
+};
+
 export type Resolvers<ContextType = any> = {
   Query?: QueryResolvers<ContextType>;
   Course?: CourseResolvers<ContextType>;
   Student?: StudentResolvers<ContextType>;
   Person?: PersonResolvers<ContextType>;
-  Mutation?: MutationResolvers<ContextType>;
+  GlobalSearch?: GlobalSearchResolvers<ContextType>;
   Monitor?: MonitorResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
 };
 
 export type DirectiveResolvers<ContextType = any> = {

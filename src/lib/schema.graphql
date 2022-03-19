@@ -4,6 +4,8 @@ enum Level {
   intermediate
   advance
 }
+#### Unions
+union GlobalSearch = Course | Student | Monitor
 #### Interfaces
 interface Person {
   _id: ID! @column
@@ -72,6 +74,8 @@ type Query {
   "Return students"
   persons: [Person]
   person(id: ID!): Person
+  "Global Search"
+  items(keyword: String!): [GlobalSearch]
 }
 type Mutation {
   "Courses"

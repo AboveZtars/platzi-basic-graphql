@@ -4,9 +4,11 @@ import { connectDB } from "./db";
 import { Db, ObjectId } from "mongodb";
 import {
   CourseResolvers,
+  GlobalSearchResolvers,
   Monitor,
   PersonResolvers,
   Student,
+  Course as CourseType,
 } from "../types/graphqlTypes";
 import { errorHandler } from "./errorHandler";
 
@@ -39,5 +41,18 @@ export const Person: PersonResolvers = {
       return "Student";
     }
     return "Monitor";
+  },
+};
+export const GlobalSearch: GlobalSearchResolvers = {
+  __resolveType: (item: Student | Monitor | CourseType, context, info) => {
+    let itemObject: {} = { ...item };
+    console.log(itemObject);
+    if (itemObject.hasOwnProperty("title")) {
+      return "Course";
+    }
+    if (itemObject.hasOwnProperty("phone")) {
+      return "Monitor";
+    }
+    return "Student";
   },
 };
